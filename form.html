@@ -1,0 +1,334 @@
+<div class="cusFormWrap">
+   <div class="bannerFormBody">
+                        <div class="cusRow">
+                          <div class="cusCol">
+                            <div class="field-hd">
+                              <span>Pick Up</span>
+                            </div>
+                            <div class="field">
+                              <input data-index="1" class="fieldInput ui-autocomplete-input" id="pickup" type="text" name="name"
+                                placeholder="Enter pickup postcode, venue or place" >
+                            </div>
+                          </div>
+                          <div class="cusCol">
+                            <div class="viaWrap">
+                              <button class="viaBtnWrap" id="add-via">
+                                <svg viewBox="0 0 60.364 60.364">
+                                  <path d="M54.454,23.18l-18.609-0.002L35.844,5.91C35.845,2.646,33.198,0,29.934,0c-3.263,0-5.909,2.646-5.909,5.91v17.269 L5.91,23.178C2.646,23.179,0,25.825,0,29.088c0.002,3.264,2.646,5.909,5.91,5.909h18.115v19.457c0,3.267,2.646,5.91,5.91,5.91 c3.264,0,5.909-2.646,5.91-5.908V34.997h18.611c3.262,0,5.908-2.645,5.908-5.907C60.367,25.824,57.718,23.178,54.454,23.18z"></path>
+                                </svg>
+                                <span>Add Via</span>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="cusCol margin0">
+                            <div id="via-list"></div>
+                          </div>
+                          <div class="cusCol">
+                            <div class="field-hd">
+                              <span>Destination</span>
+                            </div>
+                            <div class="field">
+                              <input data-index="2" class="fieldInput ui-autocomplete-input" id="dropof" type="text" name="name"
+                                placeholder="Enter destination postcode, venue or place" >
+                            </div>
+                          </div>
+                          <div class="cusCol">
+                            <div class="field-hd">
+                              <span>Date</span>
+                            </div>
+                            <div class="field">
+                              <input id="book_pick_date" title="Pick Date" type="date" name="date-1">
+                            </div>
+                          </div>
+                          <div class="cusCol">
+                            <div class="field-hd">
+                              <span>Time</span>
+                            </div>
+                            <div class="field">
+                              <input id="book_pick_time" title="Pick Time" type="Time" name="appt">
+                            </div>
+                          </div>
+                          <div class="cusCol">
+                            <div class="field-hd">
+                              <span>Passenger</span>
+                            </div>
+                            <div class="field fieldIconsWrap">
+                              <div class="fieldIcons">
+                                <img src="images/people.png" alt="people-icon">
+                              </div>
+                              <select id="Passenger" title="Single Trip">
+                                <option>No. of Passengers</option>
+                                <option value="1">1 Passenger</option>
+                                <script>
+                                  const select = document.getElementById("Passenger");
+
+                                  for (let i = 2; i <= 200; i++) {
+                                    const option = document.createElement("option");
+                                    option.value = i;
+                                    option.textContent = i + " Passengers";
+                                    select.appendChild(option);
+                                  }
+                                </script>
+                              </select>
+                              <span id="passenger-error" class="error-msg"></span>
+                            </div>
+                          </div>
+                          <div class="cusCol">
+                            <div class="field-hd">
+                              <span>Items (Optional)</span>
+                            </div>
+                            <div class="field fieldIconsWrap">
+                              <div class="fieldIcons">
+                                <img src="images/luggage.webp" alt="Luggage icon">
+                              </div>
+                              <input type="text" name="name" placeholder="Add Items" autocomplete="off" data-toggle="modal" data-target="#moreModalitem" readonly="readonly">
+                            </div>
+                          </div>
+                          <div class="cusCol">
+                            <div class="field-hd">
+                              <span>Trip</span>
+                            </div>
+                            <div class="field">
+                              <select id="journeytype" title="Single Trip" onchange="iswaitnreturn(this)">
+                                <option>Single Trip</option>
+                                <option value="WR">Wait and Return</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="cusCol cus-hold-able-wrapper">
+                            <div class="hold-able">
+                              <div id="holdabledata" class="row justify-content-center"></div>
+                            </div>
+                          </div>
+                          <div class="cusCol">
+                            <div class="submitbtn">
+                              <button id="get-quotes" class="myBtn">Get Quotes</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+</div>
+
+
+
+
+                    <!-- Modal -->
+<div class="modal fade" id="myModalitem" tabindex="-1" role="dialog" aria-labelledby="myModalitem"
+    aria-hidden="true" >
+    <div class="modal-dialog times-dialog">
+
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="row justify-content-center">
+                    <div class="col-md-4 col-6 mb-md-0 mb-3">
+                        <label class="wait-label" for="minwaittime">Waiting Time: </label>
+                    </div>
+
+                    <div class="col-md-5 col-6 mb-md-0 mb-3">
+                        <div class="input-group mb-0">
+                            <input id="minwaittime" class="form-control h-auto" type="number" min="1" max="60"
+                                value="1">
+
+                            <div class="input-group-addon">
+                                <span class="input-group-text bg-dark text-white">
+                                    <label> minutes</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-5">
+                        <button class="btn custom-btn-2 w-100" id="savebtn" onclick="savewaitnreturn();"
+                            >Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- item modal -->
+
+
+
+
+
+<!-- More item modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="moreModalitem" tabindex="-1" role="dialog" aria-labelledby="moreModalitem" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" id="modalwidth">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Select More Items</h2>
+                <button type="button" class="close close-luggage" data-dismiss="modal">
+                    <img src="images/listICons/close.png" alt="closeIcon">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="accordion" id="accordionExample" role="tablist" aria-multiselectable="true">
+                    <div class="spinner-border m-auto d-none" role="status" id="sploader" >
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="modal-footer py-1">
+                <button type="button" class="btn custom-btn-2 close-luggage" data-dismiss="modal">Close</button>
+            </div> -->
+        </div>
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+<div class="modal fade" id="itemcount" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" id="modalstyle">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Enter Quantity</h2>
+                <button type="button" class="close close-luggage" data-dismiss="modal">
+                    <img src="images/listICons/close.png" alt="closeIcon">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                
+                <input type="hidden" id="nameid" value="">
+                <input type="number" max="99" min="1" onkeydown="if(event.key==='.'){event.preventDefault();}"
+                    value="1" class="form-control custom-inputs" id="numbermoreitm">
+
+            </div>
+            <div class="modal-footer py-1">
+                <button type="button" class="btn custom-btn-2 close-luggage"
+                    onclick="additem($('#nameid').val(),$('#numbermoreitm').val())"
+                    data-dismiss="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- loader -->
+<div class="loading-div">
+    <div class="inner-loading-div">
+        <div class="loading-imgs-div mx-auto">
+            <div class="loaderAnimateWrap"></div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->
+<!-- custommodal end -->
+
+
+<!-- ✅ jQuery (must come first for Bootstrap 4 and others) -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+
+<!-- ✅ jQuery UI (if needed for autocomplete, datepicker, etc.) -->
+<!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" defer></script> -->
+<!-- <script src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js" defer></script> -->
+
+
+<!-- ✅ Bootstrap 4 (after jQuery) -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous" defer></script> -->
+
+<!-- ✅ Select2 (after jQuery) -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js" defer></script> -->
+
+<!-- ✅ Custom Form Scripts -->
+
+
+<!-- ✅ jQuery Templates (if you're still using it — note: it's deprecated) -->
+<!-- <script src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js" type="text/javascript" defer></script> -->
+
+
+
+
+
+
+
+
+<!-- <script defer>
+        $(document).ready(function(){
+           $("#sploader").css("display", "block");
+          var APIURL="https://stationcarslondon.com/api/ItemsAPI/GetItems";
+         //  var APIURL="https://localhost:44329/api/ItemsAPI/GetItems";
+           // var markup=[
+           //     {
+           //     "ItemName":"Luggage1","LineItems":["Laptop1","Pen 1"]}
+           //     ,{"ItemName":"Luggage2","LineItems":["Laptop2","Pen2"]}];
+           var markup;
+           $.get(APIURL, function(response){
+              
+           markup=response.data;
+           console.log("Intial",markup);
+           $("#person-template").tmpl({ people: JSON.parse(JSON.stringify(markup)) }).appendTo("#accordionExample");
+          // $.tmpl( $('#person-template'),JSON.parse(JSON.stringify(markup))).appendTo('#accordionExample');
+           $.each(markup, function( index, value ) {
+              
+       });
+       $("#sploader").css("display", "none")
+         });
+           
+        });
+       
+       </script>
+       <script type="text/html" id="person-template"> 
+           {{each(i, person) people}}
+       <div class="card">
+           <div class="card-header" role="tab" id="heading${i}">
+               <h3 class="luggage-headings">
+                   <button class="btn collapsed luggage-btns" type="button" data-toggle="collapse"
+                       data-target="#collapse${i}" aria-expanded="false"
+                       aria-controls="collapse${i}">
+                     ${ itemname }
+                   </button>
+               </h3>
+           </div>
+           <div id="collapse${i}" class="collapse" data-parent="#accordionExample"
+               aria-labelledby="heading${i}">
+               <div class="card-body">
+                  
+             
+             {{each(i) itemsubchild}}
+             <button type="button" data-idss="${i}" luggagetype="${itemsubchild[i].type}" class="btn luggage-items-btn"
+             onclick="addvalue(this)">${itemsubchild[i].name}</button>
+             {{/each}}
+             
+               </div>
+           </div>
+       </div>
+       {{/each}}
+       </script>
+
+
+
+	 
+
+
+
+            
+
+<script defer>
+        $(document).ready(function(){
+    console.log("run")
+    
+    $.ajax({
+          
+        
+     url: "https://stationcarslondon.com/api/VisitWeb?"+jQuery.param({ weburl: "https://www.cheaplondontaxi.co.uk/", webname : "Cheap London Taxi", officeCode:"LTX",officeNumber:"02037403527"}), 
+       type: "POST",
+       contentType: "application/json; charset=utf-8",
+         success: function (data) {
+          
+       }
+    });
+    })
+    </script> -->
