@@ -1,11 +1,20 @@
-<div class="cusFormWrap">
-   <div class="bannerFormBody">
+<div class="bannerFormBody">
                         <div class="cusRow">
+                          <div class="cusCol radioColWrap">
+                            <div class="radioCol">
+                              <input type="radio" name="journeytype" id="single_trip" checked="checked" value="Single">
+                              <label for="single_trip">Single Trip</label>
+                            </div>
+                            <div class="radioCol">
+                              <input type="radio" name="journeytype" id="waitReturn" value="WR">
+                              <label for="waitReturn">Wait and Return</label>
+                            </div>
+                          </div>
                           <div class="cusCol">
                             <div class="field-hd">
                               <span>Pick Up</span>
                             </div>
-                            <div class="field">
+                            <div class="field fieldScaleable">
                               <input data-index="1" class="fieldInput ui-autocomplete-input" id="pickup" type="text" name="name"
                                 placeholder="Enter pickup postcode, venue or place" >
                             </div>
@@ -27,7 +36,7 @@
                             <div class="field-hd">
                               <span>Destination</span>
                             </div>
-                            <div class="field">
+                            <div class="field fieldScaleable">
                               <input data-index="2" class="fieldInput ui-autocomplete-input" id="dropof" type="text" name="name"
                                 placeholder="Enter destination postcode, venue or place" >
                             </div>
@@ -37,7 +46,8 @@
                               <span>Date</span>
                             </div>
                             <div class="field">
-                              <input id="book_pick_date" title="Pick Date" type="date" name="date-1">
+                              <span class="error-msg" id="dateError">You cannot select a past date</span>
+                              <input id="book_pick_date" title="Pick Date" type="date" name="date-1" class="pickerInputs">
                             </div>
                           </div>
                           <div class="cusCol">
@@ -45,7 +55,18 @@
                               <span>Time</span>
                             </div>
                             <div class="field">
-                              <input id="book_pick_time" title="Pick Time" type="Time" name="appt">
+                              <span class="error-msg" id="timeError"></span>
+                              <input id="book_pick_time" title="Pick Time" type="Time" name="appt" class="pickerInputs">
+                            </div>
+                          </div>
+                          <div class="cusCol margin0">
+                            <div id="toggleWaitingTime">
+                              <div class="field-hd">
+                                <span>Waiting Time (in minutes)</span>
+                              </div>
+                              <div class="field fieldScaleable">
+                                <input type="number" placeholder="Enter Waiting Time in minutes" id="minwaittime" min="1" max="60">
+                              </div>
                             </div>
                           </div>
                           <div class="cusCol">
@@ -81,10 +102,10 @@
                               <div class="fieldIcons">
                                 <img src="images/luggage.webp" alt="Luggage icon">
                               </div>
-                              <input type="text" name="name" placeholder="Add Items" autocomplete="off" data-toggle="modal" data-target="#moreModalitem" readonly="readonly">
+                              <input type="button" value="Add Items" data-toggle="modal" data-target="#moreModalitem">
                             </div>
                           </div>
-                          <div class="cusCol">
+                          <!-- <div class="cusCol">
                             <div class="field-hd">
                               <span>Trip</span>
                             </div>
@@ -94,10 +115,10 @@
                                 <option value="WR">Wait and Return</option>
                               </select>
                             </div>
-                          </div>
+                          </div> -->
                           <div class="cusCol cus-hold-able-wrapper">
                             <div class="hold-able">
-                              <div id="holdabledata" class="row justify-content-center"></div>
+                              <div id="holdabledata" class="row"></div>
                             </div>
                           </div>
                           <div class="cusCol">
@@ -107,58 +128,12 @@
                           </div>
                         </div>
                     </div>
-</div>
 
 
 
 
-                    <!-- Modal -->
-<div class="modal fade" id="myModalitem" tabindex="-1" role="dialog" aria-labelledby="myModalitem"
-    aria-hidden="true" >
-    <div class="modal-dialog times-dialog">
-
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <div class="row justify-content-center">
-                    <div class="col-md-4 col-6 mb-md-0 mb-3">
-                        <label class="wait-label" for="minwaittime">Waiting Time: </label>
-                    </div>
-
-                    <div class="col-md-5 col-6 mb-md-0 mb-3">
-                        <div class="input-group mb-0">
-                            <input id="minwaittime" class="form-control h-auto" type="number" min="1" max="60"
-                                value="1">
-
-                            <div class="input-group-addon">
-                                <span class="input-group-text bg-dark text-white">
-                                    <label> minutes</label>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 col-5">
-                        <button class="btn custom-btn-2 w-100" id="savebtn" onclick="savewaitnreturn();"
-                            >Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
-
-<!-- item modal -->
-
-
-
-
-
-<!-- More item modal -->
-
-<!-- Modal -->
+<div class="show-after-load" style="display: none;">
+                      <!-- Modal -->
 <div class="modal fade" id="moreModalitem" tabindex="-1" role="dialog" aria-labelledby="moreModalitem" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" id="modalwidth">
         <div class="modal-content">
@@ -215,120 +190,12 @@
 </div>
 
 <!-- loader -->
-<div class="loading-div">
-    <div class="inner-loading-div">
-        <div class="loading-imgs-div mx-auto">
-            <div class="loaderAnimateWrap"></div>
-        </div>
-    </div>
+<!-- <div class="formLoaderWrap"> -->
+    <!-- <div class="formLoaderInner"></div> -->
+    <!-- <span class="text">Loading<span class="dotsAnim"></span></span> -->
+    <!-- <div class="anim"></div> -->
+<!-- </div> -->
+<div class="progressBarWrap">
+  <div id="progressBar"></div>
 </div>
-<!-- end modal -->
-<!-- custommodal end -->
-
-
-<!-- ✅ jQuery (must come first for Bootstrap 4 and others) -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
-
-<!-- ✅ jQuery UI (if needed for autocomplete, datepicker, etc.) -->
-<!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" defer></script> -->
-<!-- <script src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js" defer></script> -->
-
-
-<!-- ✅ Bootstrap 4 (after jQuery) -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous" defer></script> -->
-
-<!-- ✅ Select2 (after jQuery) -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js" defer></script> -->
-
-<!-- ✅ Custom Form Scripts -->
-
-
-<!-- ✅ jQuery Templates (if you're still using it — note: it's deprecated) -->
-<!-- <script src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js" type="text/javascript" defer></script> -->
-
-
-
-
-
-
-
-
-<!-- <script defer>
-        $(document).ready(function(){
-           $("#sploader").css("display", "block");
-          var APIURL="https://stationcarslondon.com/api/ItemsAPI/GetItems";
-         //  var APIURL="https://localhost:44329/api/ItemsAPI/GetItems";
-           // var markup=[
-           //     {
-           //     "ItemName":"Luggage1","LineItems":["Laptop1","Pen 1"]}
-           //     ,{"ItemName":"Luggage2","LineItems":["Laptop2","Pen2"]}];
-           var markup;
-           $.get(APIURL, function(response){
-              
-           markup=response.data;
-           console.log("Intial",markup);
-           $("#person-template").tmpl({ people: JSON.parse(JSON.stringify(markup)) }).appendTo("#accordionExample");
-          // $.tmpl( $('#person-template'),JSON.parse(JSON.stringify(markup))).appendTo('#accordionExample');
-           $.each(markup, function( index, value ) {
-              
-       });
-       $("#sploader").css("display", "none")
-         });
-           
-        });
-       
-       </script>
-       <script type="text/html" id="person-template"> 
-           {{each(i, person) people}}
-       <div class="card">
-           <div class="card-header" role="tab" id="heading${i}">
-               <h3 class="luggage-headings">
-                   <button class="btn collapsed luggage-btns" type="button" data-toggle="collapse"
-                       data-target="#collapse${i}" aria-expanded="false"
-                       aria-controls="collapse${i}">
-                     ${ itemname }
-                   </button>
-               </h3>
-           </div>
-           <div id="collapse${i}" class="collapse" data-parent="#accordionExample"
-               aria-labelledby="heading${i}">
-               <div class="card-body">
-                  
-             
-             {{each(i) itemsubchild}}
-             <button type="button" data-idss="${i}" luggagetype="${itemsubchild[i].type}" class="btn luggage-items-btn"
-             onclick="addvalue(this)">${itemsubchild[i].name}</button>
-             {{/each}}
-             
-               </div>
-           </div>
-       </div>
-       {{/each}}
-       </script>
-
-
-
-	 
-
-
-
-            
-
-<script defer>
-        $(document).ready(function(){
-    console.log("run")
-    
-    $.ajax({
-          
-        
-     url: "https://stationcarslondon.com/api/VisitWeb?"+jQuery.param({ weburl: "https://www.cheaplondontaxi.co.uk/", webname : "Cheap London Taxi", officeCode:"LTX",officeNumber:"02037403527"}), 
-       type: "POST",
-       contentType: "application/json; charset=utf-8",
-         success: function (data) {
-          
-       }
-    });
-    })
-    </script> -->
+</div>

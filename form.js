@@ -8,6 +8,85 @@ document.addEventListener("DOMContentLoaded", function () {
   }, 50);
 
   function initDynamicFormScripts() {
+function setMinDateTime(showError = false) {
+    let now = new Date();
+
+    now.setMinutes(now.getMinutes() + 15);
+    now.setSeconds(0, 0);
+
+    let yyyy = now.getFullYear();
+    let mm = String(now.getMonth() + 1).padStart(2, '0');
+    let dd = String(now.getDate()).padStart(2, '0');
+    let today = `${yyyy}-${mm}-${dd}`;
+
+    let hh = String(now.getHours()).padStart(2, '0');
+    let min = String(now.getMinutes()).padStart(2, '0');
+    let time = `${hh}:${min}`;
+
+    const dateInput = document.getElementById("book_pick_date");
+    const timeInput = document.getElementById("book_pick_time");
+    const errorBox = document.getElementById("timeError");
+
+    // store timeout globally (ek hi instance use hoga)
+    if (!window.errorTimeout) window.errorTimeout = null;
+
+    dateInput.min = today;
+
+    if (dateInput.value === today) {
+        timeInput.min = time;
+
+        if (timeInput.value && timeInput.value < time) {
+            timeInput.value = time;
+
+            if (showError) {
+                let errorTime = timeInput.value;
+                errorBox.textContent = `You can select a time from ${errorTime} onwards, but not earlier.`;
+                errorBox.style.display = "block";
+                timeInput.classList.add("field-error");
+
+                // purana timeout clear karo
+                clearTimeout(window.errorTimeout);
+
+                // 3s ke baad hide
+                window.errorTimeout = setTimeout(() => {
+                    errorBox.style.display = "none";
+                    timeInput.classList.remove("field-error");
+                }, 3000);
+            }
+        } else {
+            errorBox.style.display = "none";
+            timeInput.classList.remove("field-error");
+        }
+    } else {
+        timeInput.min = "00:00";
+        errorBox.style.display = "none";
+        timeInput.classList.remove("field-error");
+    }
+
+    // default values if not changed
+    if (!dateInput.dataset.userChanged) {
+        dateInput.value = today;
+    }
+    if (!timeInput.dataset.userChanged) {
+        timeInput.value = time;
+    }
+}
+
+setMinDateTime();
+
+// har 30s baad check/update
+setInterval(() => setMinDateTime(), 30000);
+
+// listeners
+document.getElementById("book_pick_date").addEventListener("input", e => {
+    e.target.dataset.userChanged = true;
+    setMinDateTime(true);
+});
+document.getElementById("book_pick_time").addEventListener("input", e => {
+    e.target.dataset.userChanged = true;
+    setMinDateTime(true);
+});
+
 const hardcodedAddresses = [
   'LONDON HEATHROW AIRPORT TERMINAL 2 | TW6 1EW',
   'LONDON HEATHROW AIRPORT TERMINAL 3 | TW6 1QG',
@@ -31,6 +110,16 @@ function clearFieldError($field) {
 
 function applyAutocomplete($input) {
   $input.autocomplete({
+    open: function (event, ui) {
+    let input = event.target;
+    let rect = input.getBoundingClientRect();
+
+    $(".ui-autocomplete").css({
+      top: rect.bottom + window.scrollY + "px",
+      left: rect.left + window.scrollX + "px",
+      width: rect.width + "px"
+    });
+  },
     minLength: 0,
     delay: 300,
     source: function (request, response) {
@@ -50,7 +139,7 @@ function applyAutocomplete($input) {
     response([{ label: "Searching...", value: "__searching__" }]);
 
     $.ajax({
-      url: "https://booking.taxisnetwork.com/Home/Indextwo",
+      url: "https://booking.londontaxi247.co.uk/Home/Indextwo",
       dataType: "json",
       data: { Prefix: term },
       success: function (data) {
@@ -68,14 +157,14 @@ function applyAutocomplete($input) {
               label: addr,
               value: addr
             }));
-          const dynamicList = results.concat(
-            hardcodedAddresses.map(addr => ({ label: addr, value: addr }))
-          );
+          // const dynamicList = results.concat(
+          //   hardcodedAddresses.map(addr => ({ label: addr, value: addr }))
+          // );
 
-          response(dynamicList);
+          response(results);
         } else {
           response([{
-            label: `That’s odd. We couldn’t find any results for '<span>${term}</span>'`,
+            label: `That's odd. We couldn't find any results for "<span>${term}</span>"`,
             value: "__invalid__"
           }]);
         }
@@ -249,10 +338,10 @@ $("#add-via").on("click", function () {
       <div class="field-hd">
         <span class="viaFieldHd">Via ${viaCount}</span>
       </div>
-      <div class="viaFieldBtnWrap">
+      <div class="viaFieldBtnWrap fieldScaleable">
         <input type="text" class="fieldInput viadata" placeholder="Enter Via Location">
         <button type="button" class="removeField">
-          <img src="images/listIcons/close.png" alt="Cut Via">
+          <img src="images/listICons/close.png" alt="Cut Via">
         </button>
       </div>
     </div>
@@ -313,7 +402,7 @@ function validateAddressField($field) {
 
 
 
-window.TDate = function () {
+function TDate() {
     var ToDate = new Date();
     var userdate = new Date(document.getElementById("book_pick_date").value).toJSON().slice(0, 10);
     var today = new Date().toJSON().slice(0, 10);
@@ -325,45 +414,42 @@ window.TDate = function () {
         getTime();
     }
 }
-window.iswaitnreturn = function(e) {
+function iswaitnreturn(e) {
     if ($(e).val() == "WR") {
         $("#myModalitem").modal({ show: !0, keyboard: !1, backdrop: "static" });
     } else {
         waitingtime = 0;
     }
 }
-window.savewaitnreturn = function() {
+function savewaitnreturn() {
     $("#myModalitem").modal("toggle");
     waitingtime = $("#minwaittime").val();
 }
 var accuserdb = "";
-window.addvalue = function(e) {
+function addvalue(e) {
     var mytext = $(e).text();
     var mytype = $(e).attr("luggagetype");
     $("#number").val("");
     $("#nameid").val(mytext);
     $("#nametype").val(mytype);
-
     if (accuserdb.includes(mytext)) {
         var s = accuserdb.split(mytext)[0];
         var ss = s.substr(s.length - 3).trim();
         var ssss = ss[0];
         $("#number").val(ssss);
     }
-
     $("#moreModalitem").modal("hide");
     $("#itemcount").modal("show");
-};
-
-window.removeitem = function(e) {
+}
+function removeitem(e) {
     var arr = accuserdb.split(",");
     var le = $(e).parent().parent().text().trim();
     var ind = arr.indexOf(le);
     arr.splice(ind, 1);
     accuserdb = arr.join();
-    $(e).parent().parent().parent().remove();
+    $(e).parent().parent().remove();
 }
-window.additem = function(e, val, type) {
+function additem(e, val, type) {
     var text = e.trim();
     var myid = text.replace(/\s/g, "").replace(/[^\w]/g, "");
     if (accuserdb.includes(text)) {
@@ -378,8 +464,8 @@ window.additem = function(e, val, type) {
                 $(`#${myidd}`).html(`
                             <input class="form-control holddatainput" data-sendval="${newVal}@${text}" value="${newItem}" disabled data-type="${val} ${type}">
                             <div class="input-group-addon">
-                                <button type="button" class="btn input-grp-btns" onclick="removeitem(this)">
-                                    <img class="form-icons" src="images/delete.png" alt="luggage delete" width="20">
+                                <button type="button" class="" onclick="removeitem(this)">
+                                    <img class="form-icons" src="images/listICons/close.png" alt="luggage delete" width="20">
                                 </button>
                             </div>`);
             } else {
@@ -395,14 +481,15 @@ function insertitem(text, val, type) {
     var myid = text.replace(/\s/g, "").replace(/[^\w]/g, "");
     var newItem = `${val} ${text}`;
     var tag = `
-                <div class="col-lg-3 col-md-4 col-xs-12">
-                    <div id="id_${myid}" class="input-group mb-2" data-type="${val} ${type}">
+                <div class="col-lg-6 col-12">
+                <div class="field-hd">
+                              <span>Item Added</span>
+                            </div>
+                    <div id="id_${myid}" class="dataHoldableWrap" data-type="${val} ${type}">
                         <input class="form-control holddatainput" data-sendval="${val}@${text}" value="${newItem}" disabled data-type="${val} ${type}">
-                        <div class="input-group-addon">
-                            <button type="button" class="btn input-grp-btns del-btn_" onclick="removeitem(this)">
-                                <img class="form-icons" src="images/delete.png" alt="luggage delete" width="20">
-                            </button>
-                        </div>
+                        <button type="button" class=" del-btn_" onclick="removeitem(this)">
+                            <img class="form-icons" src="images/listICons/close.png" alt="luggage delete" width="20">
+                        </button>
                     </div>
                 </div>`;
     if (!accuserdb.includes(newItem)) {
@@ -450,6 +537,7 @@ $(document).ready(function () {
         "TV(30to60inches)",
     ];
     $("#get-quotes").click(function (e) {
+      debugger
       e.preventDefault();
   
       // Pehle address fields ka validation check
@@ -510,7 +598,8 @@ $(document).ready(function () {
       var hourstxt = hm[0];
       var minutstxt = hm[1];
       var passengers = $("#Passenger").val();
-      var TripFlag = $("#journeytype").val();
+      // var TripFlag = $("#journeytype").val();
+      var TripFlag = $("input[name='journeytype']:checked").val();
       var WaitingMints = $("#minwaittime").val();
       var frmDrNmbr = $("#book_pick_from_doorno").val();
       var toDrNmbr = $("#book_pick_to_doorno").val();
@@ -535,7 +624,8 @@ $(document).ready(function () {
       obj.push(minutstxt);
   
       var office_name = "LTX";
-      
+      var color_code = "fc983c";
+      var office_details = "LTX,Cheap London Taxi,https://www.cheaplondontaxi.co.uk/,02037403527";
   
       // IF-ELSE conditions
       if (datetxt == "" || minutstxt == "" || hourstxt == "") {
@@ -547,41 +637,64 @@ $(document).ready(function () {
       } 
       else if (!allValid) {}
       else {
-          $(".loading-div").css("display", "block");
-          $(document.body).css("overflow", "hidden");
   
-          window.location.href =
-              `https://${webHitUrl}/OurVehicle/OurVehicle?luggage_text=` +
-              inputsvalues +
-              "&pickup=" +
-              pickup +
-              "&checkurl=" +
-              true +
-              "&dropoff=" +
-              dropoff +
-              "&office_details=" +
-              office_details +
-              "&luggageobject=" +
-              obj +
-              "&listviasaddress=" +
-              `${finalList}` +
-              "&tripFlag=" +
-              TripFlag +
-              "&mints=" +
-              WaitingMints +
-              "&showVehicle=" +
-              isContains +
-              "&colorCode=" +
-              color_code;
-  
-          $(window).bind("pageshow", function (event) {
-              $(".loading-div").css("display", "none");
-              $(document.body).css("overflow", "");
-          });
+          const url =
+  "https://booking.londontaxi247.co.uk/OurVehicle/OurVehicle?luggage_text=" +
+  inputsvalues +
+  "&pickup=" +
+  pickup +
+  "&checkurl=" +
+  true +
+  "&dropoff=" +
+  dropoff +
+  "&office_details=" +
+  office_details +
+  "&luggageobject=" +
+  obj +
+  "&listviasaddress=" +
+  `${finalList}` +
+  "&tripFlag=" +
+  TripFlag +
+  "&mints=" +
+  WaitingMints +
+  "&showVehicle=" +
+  isContains +
+  "&colorCode=" +
+  color_code;
+
+startProgressBar(url);
       }
   });
   
 });
+
+function startProgressBar(url) {
+  const bar = document.getElementById("progressBar");
+  let width = 0;
+  bar.style.width = "0%";
+  bar.style.display = "block";
+
+  $('.progressBarWrap').show();
+
+  const interval = setInterval(() => {
+    if (width < 90) {
+      width += Math.random() * 10;
+      bar.style.width = width + "%";
+    }
+  }, 400);
+
+  window.location.href = url;
+
+  $(window).bind("pageshow", function () {
+    clearInterval(interval);
+    bar.style.width = "100%";
+    setTimeout(() => {
+      bar.style.display = "none";
+      $('.progressBarWrap').hide();
+    }, 500);
+  });
+}
+
 // $("#pickup").select2({
 //     placeholder: "Select pickup address",
 //     ajax: {
@@ -616,58 +729,148 @@ $(document).ready(function () {
 //     },
 //     minimumInputLength: 3,
 // });
-document.addEventListener("DOMContentLoaded", function () {
-    function setupModal(modalId, outputId) {
-        const modal = document.getElementById(modalId);
-        const modalItems = modal.querySelectorAll(".airportNames button");
-        
-        modalItems.forEach((item) => {
-            item.addEventListener("click", function (event) {
-                event.preventDefault();
-
-                const valuedrop = item.getAttribute("data-value");
-                const selectedElement = document.getElementById(outputId);
-
-                // Set the input field value
-                selectedElement.value = valuedrop;
-                if (!validAddresses.includes(valuedrop)) {
-                    validAddresses.push(valuedrop);
-                }
-
-                // 🔍 Find the field index from DOM
-                const fieldIndex = selectedElement.getAttribute("data-index");
-
-                if (fieldIndex !== null) {
-                    tempFields[fieldIndex] = valuedrop;
-                    lastValidFields[fieldIndex] = valuedrop;
-
-                    // 🔁 Trigger blur to activate validation logic
-                    selectedElement.dispatchEvent(new Event("blur"));
-                }
-
-                // Optional: close modal
-                // modal.style.display = "none";
-            });
-        });
-    }
-
-    setupModal("airportListModal1", "pickup");
-    setupModal("airportListModal2", "dropof");
-});
 
 $("button").click(function () {
     event.preventDefault();
 });
-const popup = document.getElementById("bookingPopup");
-function openPopup() {
-    popup.classList.add("active");
-}
-function closePopup() {
-    popup.classList.remove("active");
+// const popup = document.getElementById("bookingPopup");
+// function openPopup() {
+//     popup.classList.add("active");
+// }
+// function closePopup() {
+//     popup.classList.remove("active");
+// }
+// helper function
+// function focusAndScroll(inputEl) {
+//   if (!inputEl) return;
+
+//   // jab user manually focus kare
+//   inputEl.addEventListener("focus", () => {
+//     doScroll(inputEl);
+//   });
+// }
+
+// function doScroll(inputEl) {
+//   setTimeout(() => {
+//     // mobile/tablet par hi scroll karo
+//     if (window.innerWidth <= 768) {
+//       if (typeof inputEl.scrollIntoView === "function") {
+//         inputEl.scrollIntoView({ behavior: "smooth", block: "center" });
+//       } else {
+//         const rect = inputEl.getBoundingClientRect();
+//         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+//         window.scrollTo({
+//           top: rect.top + scrollTop - window.innerHeight / 2,
+//           behavior: "smooth"
+//         });
+//       }
+//     }
+//   }, 300);
+// }
+//   focusAndScroll(document.getElementById("pickup"));
+
+function doScroll(inputEl) {
+  setTimeout(() => {
+    if (window.innerWidth <= 768) {
+      const rect = inputEl.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      window.scrollTo({
+        top: rect.top + scrollTop - 24,
+        behavior: "smooth"
+      });
+    }
+  }, 300);
 }
 
 
-      const sploader = document.getElementById("sploader");
+// ðŸ‘‡ yahan delegation: sab inputs ke liye chalega
+document.addEventListener("focusin", function (e) {
+  if (
+    e.target.matches("#pickup, #dropof, .viadata, #minwaittime")
+  ) {
+    doScroll(e.target);
+  }
+});
+
+  
+
+const WaitnReturn = document.getElementById("waitReturn");
+const singleTrip = document.getElementById("single_trip");
+const inputWrap = document.getElementById("toggleWaitingTime");
+
+  function toggleInput() {
+    function isMobile() {
+      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+    }
+    if (WaitnReturn.checked) {
+      // inputWrap.style.display = "block";
+      inputWrap.classList.add("show");
+      
+      setTimeout(() => {
+        minwaittime.focus();
+        doScroll(minwaittime);
+      }, 300);
+
+    } else {
+      // inputWrap.style.display = "none";
+      inputWrap.classList.remove("show");
+    }
+  }
+
+  // Event listeners
+  WaitnReturn.addEventListener("change", toggleInput);
+  singleTrip.addEventListener("change", toggleInput);
+
+//   document.addEventListener("focusout", function (e) {
+//   if (
+//     e.target.matches("#pickup, #dropoff, .viaInput, #minwaittime")
+//   ) {
+//     e.target.blur();
+//   }
+// });
+
+document.getElementById("minwaittime").setAttribute("inputmode", "numeric");
+
+document.getElementById("minwaittime").addEventListener("keypress", function (e) {
+  if (!/[0-9]/.test(e.key)) {
+    e.preventDefault(); // block non-numeric
+  }
+});
+document.querySelectorAll('input[type="date"], input[type="time"]').forEach(input => {
+  input.addEventListener("click", () => {
+    if (input && typeof input.showPicker === "function") {
+      input.showPicker();
+    } else {
+      input.focus();
+    }
+  });
+});
+const dateInput = document.getElementById("book_pick_date");
+const dateErrorBox = document.getElementById("dateError");
+
+dateInput.addEventListener("change", function () {
+  let today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  let selected = new Date(this.value);
+
+  if (selected < today) {
+    let yyyy = today.getFullYear();
+    let mm = String(today.getMonth() + 1).padStart(2, "0");
+    let dd = String(today.getDate()).padStart(2, "0");
+    this.value = `${yyyy}-${mm}-${dd}`;
+
+    dateInput.classList.add("field-error");
+    dateErrorBox.style.display = "block";
+    setTimeout(() => {
+      dateInput.classList.remove("field-error");
+      dateErrorBox.style.display = "none";
+    }, 3000);
+  }
+});
+document.addEventListener("DOMContentLoaded", function() {
+  const sploader = document.getElementById("sploader");
   sploader.style.display = "block";
 
   const APIURL = "https://stationcarslondon.com/api/ItemsAPI/GetItems";
@@ -743,5 +946,7 @@ function closePopup() {
       console.error(error);
       sploader.style.display = "none";
     });
+});
+
     }
 });
