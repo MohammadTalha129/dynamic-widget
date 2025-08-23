@@ -1,4 +1,5 @@
-<div class="bannerFormBody">
+<div class="cusFormWrap">
+  <div class="bannerFormBody">
                         <div class="cusRow">
                           <div class="cusCol radioColWrap">
                             <div class="radioCol">
@@ -128,74 +129,4 @@
                           </div>
                         </div>
                     </div>
-
-
-
-
-<div class="show-after-load" style="display: none;">
-                      <!-- Modal -->
-<div class="modal fade" id="moreModalitem" tabindex="-1" role="dialog" aria-labelledby="moreModalitem" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" id="modalwidth">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Select More Items</h2>
-                <button type="button" class="close close-luggage" data-dismiss="modal">
-                    <img src="images/listICons/close.png" alt="closeIcon">
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <div class="accordion" id="accordionExample" role="tablist" aria-multiselectable="true">
-                    <div class="spinner-border m-auto d-none" role="status" id="sploader" >
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- <div class="modal-footer py-1">
-                <button type="button" class="btn custom-btn-2 close-luggage" data-dismiss="modal">Close</button>
-            </div> -->
-        </div>
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
-
-
-<div class="modal fade" id="itemcount" data-backdrop="static" data-keyboard="false" tabindex="-1"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm" id="modalstyle">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Enter Quantity</h2>
-                <button type="button" class="close close-luggage" data-dismiss="modal">
-                    <img src="images/listICons/close.png" alt="closeIcon">
-                </button>
-            </div>
-
-            <div class="modal-body">
-                
-                <input type="hidden" id="nameid" value="">
-                <input type="number" max="99" min="1" onkeydown="if(event.key==='.'){event.preventDefault();}"
-                    value="1" class="form-control custom-inputs" id="numbermoreitm">
-
-            </div>
-            <div class="modal-footer py-1">
-                <button type="button" class="btn custom-btn-2 close-luggage"
-                    onclick="additem($('#nameid').val(),$('#numbermoreitm').val())"
-                    data-dismiss="modal">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- loader -->
-<!-- <div class="formLoaderWrap"> -->
-    <!-- <div class="formLoaderInner"></div> -->
-    <!-- <span class="text">Loading<span class="dotsAnim"></span></span> -->
-    <!-- <div class="anim"></div> -->
-<!-- </div> -->
-<div class="progressBarWrap">
-  <div id="progressBar"></div>
-</div>
 </div>
