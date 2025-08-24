@@ -19,7 +19,7 @@ body .ui-autocomplete .ui-menu-item {
 body .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper {
     font-size: 11px;
     padding: 4px 22px;
-    background-image: url(images/pin.png);
+    background-image: url(https://dynamic-widget.pages.dev/images/pin.png);
     background-position: 5px center;
     background-size: 14px;
     background-repeat: no-repeat;
@@ -28,13 +28,13 @@ body .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper {
 }
 
 body .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper.airportList{
-    background-image: url(images/plane.png);
+    background-image: url(https://dynamic-widget.pages.dev/images/plane.png);
     background-size: 12px;
     padding: 4px 24px;
 }
 
 body .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper.info-message{
-    background-image: url(images/search.png);
+    background-image: url(https://dynamic-widget.pages.dev/images/search.png);
     font-size: 11px;
     color: rgba(0 0 0 / 60%);
     font-style: italic;
@@ -43,7 +43,7 @@ body .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper.info-message{
     font-weight: 600;
 }
 body .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper.invalidInput{
-    background-image: url(images/sad.png);
+    background-image: url(https://dynamic-widget.pages.dev/images/sad.png);
     padding: 14px 14px 14px 24px;
 }
 body .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper.invalidInput span{

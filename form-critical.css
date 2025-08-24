@@ -90,15 +90,17 @@ input[type="time"]::-webkit-date-and-time-value {
 }
 
 .cusFormWrap .cusRow .cusCol input[type="time"] {
-    background: #fff url(images/listICons/clock.png) 95% center/13px no-repeat !important
+    background: #fff url(https://dynamic-widget.pages.dev/images/clock.png) 95% center/13px no-repeat !important
 }
 
 .cusFormWrap .cusRow .cusCol input[type="date"] {
-    background: #fff url(images/listICons/calendar.png) 95% center/13px no-repeat !important
+    background: #fff url(https://dynamic-widget.pages.dev/images/calendar.png) 95% center/13px no-repeat !important
 }
 
 .cusFormWrap .cusRow .cusCol input.field-error,
-.cusFormWrap .cusRow .cusCol select.field-error {
+.cusFormWrap .cusRow .cusCol select.field-error,
+.cusFormWrap .cusRow .cusCol input:focus.field-error,
+.cusFormWrap .cusRow .cusCol select:focus.field-error {
     border-color: red
 }
 
@@ -268,14 +270,14 @@ input[type="radio"] {
 
 #toggleWaitingTime {
     opacity: 0;
-    height: 0;
+    max-height: 0;
     overflow: hidden;
     transition: all 0.3s
 }
 
 #toggleWaitingTime.show {
     opacity: 1;
-    height: 74px;
+    max-height: 100px;
     overflow: visible
 }
 

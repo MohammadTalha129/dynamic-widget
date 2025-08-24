@@ -544,27 +544,6 @@ $(document).ready(function () {
               allValid = false;
           }
       });
-
-      // ------------------- MIN WAIT TIME VALIDATION -------------------
-const $waitTime = $("#minwaittime");
-let waitTimeVal = $waitTime.val().trim();
-const $waitError = $("#waittimeError"); 
-
-if (waitTimeVal === "") {
-    $waitError.text("Please enter a wait time.").show();
-    $waitTime.focus();
-    return; 
-}
-
-waitTimeVal = parseInt(waitTimeVal, 10);
-if (isNaN(waitTimeVal) || waitTimeVal < 1 || waitTimeVal > 60) {
-    $waitError.text("Wait time must be between 1 and 60 minutes.").show();
-    $waitTime.focus();
-    return;
-}
-
-$waitError.hide();
-// ------------------- MIN WAIT TIME VALIDATION -------------------
   
       var date = $("#book_pick_date").val();
       var time = $("#book_pick_time").val();
@@ -638,7 +617,29 @@ $waitError.hide();
       obj.push(datetxt);
       obj.push(hourstxt);
       obj.push(minutstxt);
-  
+  // ------------------- MIN WAIT TIME VALIDATION -------------------
+if(journeyType === "WR"){
+  const $waitTime = $("#minwaittime");
+let waitTimeVal = $waitTime.val().trim();
+const $waitError = $("#waittimeError"); 
+
+if (waitTimeVal === "") {
+    $waitError.text("Please enter a wait time.").show();
+    $waitTime.addClass(".field-error");
+    return; 
+}
+
+waitTimeVal = parseInt(waitTimeVal, 10);
+if (isNaN(waitTimeVal) || waitTimeVal < 1 || waitTimeVal > 60) {
+    $waitError.text("Wait time must be between 1 and 60 minutes.").show();
+    $waitTime.addClass(".field-error");
+    return;
+}
+$waitTime.removeClass(".field-error");
+$waitError.hide();
+}
+// ------------------- MIN WAIT TIME VALIDATION -------------------
+      
       // IF-ELSE conditions
       if (datetxt == "" || minutstxt == "" || hourstxt == "") {
           alert("ERROR!\nPlease select all things correctly.");
@@ -860,6 +861,7 @@ minwaittime.addEventListener("input", function (e) {
   if (val === "") {
     e.target.value = "";
     waittimeError.style.display = "none";
+    minwaittime.classList.remove(".field-error");
     return;
   }
 
@@ -875,6 +877,7 @@ minwaittime.addEventListener("input", function (e) {
   // ✅ Live validation: agar 1-60 ke beech hai → error hide
   if (num >= 1 && num <= 60) {
     waittimeError.style.display = "none";
+    minwaittime.classList.remove(".field-error");
   }
 });
 document.querySelectorAll('input[type="date"], input[type="time"]').forEach(input => {
