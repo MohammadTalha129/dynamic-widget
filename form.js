@@ -1,13 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
-
-  const checkForm = setInterval(() => {
-    if (document.querySelector("#dynamic-widget .cusFormWrap")) {
-      clearInterval(checkForm);
-      initDynamicFormScripts();
-    }
-  }, 50);
-
-  function initDynamicFormScripts() {
 function setMinDateTime(showError = false) {
     let now = new Date();
 
@@ -946,7 +936,4 @@ document.addEventListener("DOMContentLoaded", function() {
       console.error(error);
       sploader.style.display = "none";
     });
-});
-
-    }
 });
