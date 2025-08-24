@@ -157,6 +157,33 @@
     </div>
 </div>
 
+<div class="modal fade" id="itemcount" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" id="modalstyle">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Enter Quantity</h2>
+                <button type="button" class="close close-luggage" data-dismiss="modal">
+                    <img src="images/listICons/close.png" alt="closeIcon">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                
+                <input type="hidden" id="nameid" value="">
+                <input type="number" max="99" min="1" onkeydown="if(event.key==='.'){event.preventDefault();}"
+                    value="1" class="form-control custom-inputs" id="numbermoreitm">
+
+            </div>
+            <div class="modal-footer py-1">
+                <button type="button" class="btn custom-btn-2 close-luggage"
+                    onclick="additem($('#nameid').val(),$('#numbermoreitm').val())"
+                    data-dismiss="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="progressBarWrap">
   <div id="progressBar"></div>
 </div>

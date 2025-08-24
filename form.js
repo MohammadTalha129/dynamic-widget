@@ -868,7 +868,6 @@ dateInput.addEventListener("change", function () {
     .then(response => response.json())
     .then(response => {
       const markup = response.data;
-console.log(markup)
       const accordion = document.getElementById("accordionExample");
 
       markup.forEach((person, i) => {
