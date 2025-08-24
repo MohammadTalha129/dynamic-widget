@@ -129,7 +129,7 @@ function applyAutocomplete($input) {
     response([{ label: "Searching...", value: "__searching__" }]);
 
     $.ajax({
-      url: "https://booking.londontaxi247.co.uk/Home/Indextwo",
+      url: `https://${destnationDomain}/Home/Indextwo`,
       dataType: "json",
       data: { Prefix: term },
       success: function (data) {
@@ -613,10 +613,6 @@ $(document).ready(function () {
       obj.push(hourstxt);
       obj.push(minutstxt);
   
-      var office_name = "LTX";
-      var color_code = "fc983c";
-      var office_details = "LTX,Cheap London Taxi,https://www.cheaplondontaxi.co.uk/,02037403527";
-  
       // IF-ELSE conditions
       if (datetxt == "" || minutstxt == "" || hourstxt == "") {
           alert("ERROR!\nPlease select all things correctly.");
@@ -629,7 +625,7 @@ $(document).ready(function () {
       else {
   
           const url =
-  "https://booking.londontaxi247.co.uk/OurVehicle/OurVehicle?luggage_text=" +
+  `https://${destnationDomain}/OurVehicle/OurVehicle?luggage_text=` +
   inputsvalues +
   "&pickup=" +
   pickup +
