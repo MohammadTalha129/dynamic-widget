@@ -630,7 +630,7 @@ $(document).ready(function () {
         $("#Passenger").addClass("field-error")
       } 
       else if (!allValid) {}
-      else if(journeyType === "WR"){
+      else if(TripFlag === "WR"){
   const $waitTime = $("#minwaittime");
 let waitTimeVal = $waitTime.val().trim();
 const $waitError = $("#waittimeError"); 
