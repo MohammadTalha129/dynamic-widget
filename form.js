@@ -533,154 +533,79 @@ $(document).ready(function () {
         "TV(30to60inches)",
     ];
     $("#get-quotes").click(function (e) {
-    e.preventDefault();
+  e.preventDefault(); // stop default
 
-    // Pehle address fields ka validation check
-    let allValid = true;
-    $(".fieldInput").each(function () {
-        const $field = $(this);
-        const isValid = validateAddressField($field);
-        if (!isValid) {
-            allValid = false;
-        }
-    });
+  // --- Common values ---
+  const journeyType = $("input[name='journeytype']:checked").val();
+  const passengers = parseInt($("#Passenger").val(), 10);
+  const datetxt = $("#datepicker").val();
+  const hourstxt = $("#hour").val();
+  const minutstxt = $("#minute").val();
 
-    var date = $("#book_pick_date").val();
-    var time = $("#book_pick_time").val();
-    var d = date + " " + time;
-    let myDate = new Date();
-    var currrent = addHoursToDate(myDate, 1);
+  const $waitTime = $("#minwaittime");
+  const $waitError = $("#waittimeError");
 
-    function toTimestamp(strDate) {
-        var datum = Date.parse(strDate);
-        return datum / 1000;
+  // --- Helper: redirect / proceed ---
+  function proceed() {
+    const url =
+      `https://${destnationDomain}/OurVehicle/OurVehicle?luggage_text=` +
+      inputsvalues +
+      "&pickup=" + pickup +
+      "&checkurl=" + true +
+      "&dropoff=" + dropoff +
+      "&office_details=" + office_details +
+      "&luggageobject=" + obj +
+      "&listviasaddress=" + `${finalList}` +
+      "&tripFlag=" + TripFlag +
+      "&mints=" + WaitingMints +
+      "&showVehicle=" + isContains +
+      "&colorCode=" + color_code;
+
+    // ✅ Redirect / Start progress
+    startProgressBar(url);
+    // window.location.href = url; // <-- if you want direct redirect
+  }
+
+  // --- Validation starts ---
+  if (datetxt === "" || minutstxt === "" || hourstxt === "") {
+    alert("ERROR!\nPlease select all things correctly.");
+    return;
+  }
+
+  if (isNaN(passengers) || passengers <= 0) {
+    $("#passenger-error").text("Please select number of passengers").show();
+    $("#Passenger").addClass("field-error").focus();
+    return;
+  } else {
+    $("#Passenger").removeClass("field-error");
+    $("#passenger-error").hide();
+  }
+
+  if (!allValid) {
+    // Agar address invalid ho to kuch bhi na karo
+    return;
+  }
+
+  if (journeyType === "waiting") {
+    // --- Wait Time Validation ---
+    let waitTimeVal = $waitTime.val().trim();
+
+    if (waitTimeVal === "" || isNaN(waitTimeVal) || waitTimeVal < 1 || waitTimeVal > 60) {
+      $waitError.text("Wait time must be between 1 and 60 minutes.").show();
+      $waitTime.addClass("field-error").focus();
+      return;
     }
 
-    inputsvalues = [];
-    itemsValues = [];
-    Array_Luggage_text = [];
-    arrcheckincabin = [];
+    $waitTime.removeClass("field-error");
+    $waitError.hide();
 
-    var inputs = $(".holddatainput");
-    for (var i = 0; i < inputs.length; i++) {
-        itemsValues.push(inputs.data("sendval"));
-        inputsvalues.push($(inputs[i]).data("sendval"));
-        arrcheckincabin.push($(inputs[i]).data("type"));
-    }
+    return proceed(); // ✅ redirect with wait time
+  }
 
-    var cabinfinal = 0;
-    var checkinfinal = 0;
-    var passengerfinal = 0;
-
-    for (var j = 0; j < arrcheckincabin.length; j++) {
-        var ret = arrcheckincabin[j].split(" ");
-        ret = ret.filter(function (el) {
-            return el != null && el != "";
-        });
-        if (ret[1] == "cabin") {
-            cabinfinal += parseInt(ret[0]);
-        } else if (ret[1] == "checkin") {
-            checkinfinal += parseInt(ret[0]);
-        } else if (ret[1] == "passenger") {
-            passengerfinal += parseInt(ret[0]);
-        }
-    }
-
-    var pickup = $("#pickup").val();
-    var dropoff = $("#dropof").val();
-    var datetxt = $("#book_pick_date").val();
-    var hm = time.split(":");
-    var hourstxt = hm[0];
-    var minutstxt = hm[1];
-    var passengers = $("#Passenger").val();
-    var TripFlag = $("input[name='journeytype']:checked").val();
-    var WaitingMints = $("#minwaittime").val();
-    var frmDrNmbr = $("#book_pick_from_doorno").val();
-    var toDrNmbr = $("#book_pick_to_doorno").val();
-
-    let listvias = $(".viadata")
-        .map((_, el) => el.value.replace(/\|,/g, "@"))
-        .get();
-    listvias = listvias.filter(function (v) {
-        return v !== "";
-    });
-    let finalList = listvias.join("@");
-
-    passengers = parseFloat(passengers) + parseInt(passengerfinal);
-
-    var isContains = false;
-    var obj = [];
-    obj.push(cabinfinal);
-    obj.push(checkinfinal);
-    obj.push(passengers);
-    obj.push(datetxt);
-    obj.push(hourstxt);
-    obj.push(minutstxt);
-
-    // ------------------- IF-ELSE CHAIN -------------------
-    if (datetxt == "" || minutstxt == "" || hourstxt == "") {
-        alert("ERROR!\nPlease select all things correctly.");
-    }
-    else if (isNaN(passengers) || passengers <= 0) {
-        $("#passenger-error").text("Please select number of passengers").show();
-        $("#Passenger").addClass("field-error");
-    } 
-    else if (!allValid) {
-        // Address validation failed
-    }
-    else if (TripFlag === "WR") {
-        // Waiting time validation
-        const $waitTime = $("#minwaittime");
-        let waitTimeVal = $waitTime.val().trim();
-        const $waitError = $("#waittimeError");
-
-        if (waitTimeVal === "") {
-            $waitError.text("Please enter a wait time.").show();
-            $waitTime.addClass("field-error");
-            $waitTime.focus();
-            return; // Stop execution
-        }
-
-        waitTimeVal = parseInt(waitTimeVal, 10);
-        if (isNaN(waitTimeVal) || waitTimeVal < 1 || waitTimeVal > 60) {
-            $waitError.text("Wait time must be between 1 and 60 minutes.").show();
-            $waitTime.addClass("field-error");
-            $waitTime.focus();
-            return; // Stop execution
-        }
-
-        $waitTime.removeClass("field-error");
-        $waitError.hide();
-    }
-    else {
-        // ✅ All validations passed → proceed
-        const url =
-          `https://${destnationDomain}/OurVehicle/OurVehicle?luggage_text=` +
-          inputsvalues +
-          "&pickup=" +
-          pickup +
-          "&checkurl=" +
-          true +
-          "&dropoff=" +
-          dropoff +
-          "&office_details=" +
-          office_details +
-          "&luggageobject=" +
-          obj +
-          "&listviasaddress=" +
-          `${finalList}` +
-          "&tripFlag=" +
-          TripFlag +
-          "&mints=" +
-          WaitingMints +
-          "&showVehicle=" +
-          isContains +
-          "&colorCode=" +
-          color_code;
-
-        startProgressBar(url);
-    }
+  // --- Normal case ---
+  return proceed();
 });
+
 
   
 });
