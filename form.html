@@ -67,6 +67,7 @@
                               </div>
                               <div class="field fieldScaleable">
                                 <input type="number" placeholder="Enter Waiting Time in minutes" id="minwaittime" min="1" max="60">
+                                <span id="waittimeError" class="error-msg"></span>
                               </div>
                             </div>
                           </div>
@@ -76,21 +77,11 @@
                             </div>
                             <div class="field fieldIconsWrap">
                               <div class="fieldIcons">
-                                <img src="images/people.png" alt="people-icon">
+                                <img src="images/persons.png" alt="people-icon">
                               </div>
                               <select id="Passenger" title="Single Trip">
                                 <option>No. of Passengers</option>
                                 <option value="1">1 Passenger</option>
-                                <script>
-                                  const select = document.getElementById("Passenger");
-
-                                  for (let i = 2; i <= 200; i++) {
-                                    const option = document.createElement("option");
-                                    option.value = i;
-                                    option.textContent = i + " Passengers";
-                                    select.appendChild(option);
-                                  }
-                                </script>
                               </select>
                               <span id="passenger-error" class="error-msg"></span>
                             </div>
@@ -101,7 +92,7 @@
                             </div>
                             <div class="field fieldIconsWrap">
                               <div class="fieldIcons">
-                                <img src="images/luggage.webp" alt="Luggage icon">
+                                <img src="images/luggage.png" alt="Luggage icon">
                               </div>
                               <input type="button" value="Add Items" data-toggle="modal" data-target="#moreModalitem">
                             </div>
@@ -143,7 +134,7 @@
             <div class="modal-header">
                 <h2 class="modal-title">Select More Items</h2>
                 <button type="button" class="close close-luggage" data-dismiss="modal">
-                    <img src="images/listICons/close.png" alt="closeIcon">
+                    <img src="images/close.png" alt="closeIcon">
                 </button>
             </div>
             <div class="modal-body">
@@ -164,7 +155,7 @@
             <div class="modal-header">
                 <h2 class="modal-title">Enter Quantity</h2>
                 <button type="button" class="close close-luggage" data-dismiss="modal">
-                    <img src="images/listICons/close.png" alt="closeIcon">
+                    <img src="images/close.png" alt="closeIcon">
                 </button>
             </div>
 

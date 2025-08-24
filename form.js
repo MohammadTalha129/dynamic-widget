@@ -64,10 +64,8 @@ function setMinDateTime(showError = false) {
 
 setMinDateTime();
 
-// har 30s baad check/update
 setInterval(() => setMinDateTime(), 30000);
 
-// listeners
 document.getElementById("book_pick_date").addEventListener("input", e => {
     e.target.dataset.userChanged = true;
     setMinDateTime(true);
@@ -76,6 +74,14 @@ document.getElementById("book_pick_time").addEventListener("input", e => {
     e.target.dataset.userChanged = true;
     setMinDateTime(true);
 });
+
+const select = document.getElementById("Passenger");
+for (let i = 2; i <= 200; i++) {
+  const option = document.createElement("option");
+  option.value = i;
+  option.textContent = i + " Passengers";
+  select.appendChild(option);
+}
 
 const hardcodedAddresses = [
   'LONDON HEATHROW AIRPORT TERMINAL 2 | TW6 1EW',
@@ -331,7 +337,7 @@ $("#add-via").on("click", function () {
       <div class="viaFieldBtnWrap fieldScaleable">
         <input type="text" class="fieldInput viadata" placeholder="Enter Via Location">
         <button type="button" class="removeField">
-          <img src="images/listICons/close.png" alt="Cut Via">
+          <img src="images/close.png" alt="Cut Via">
         </button>
       </div>
     </div>
@@ -455,7 +461,7 @@ function additem(e, val, type) {
                             <input class="form-control holddatainput" data-sendval="${newVal}@${text}" value="${newItem}" disabled data-type="${val} ${type}">
                             <div class="input-group-addon">
                                 <button type="button" class="" onclick="removeitem(this)">
-                                    <img class="form-icons" src="images/listICons/close.png" alt="luggage delete" width="20">
+                                    <img class="form-icons" src="images/close.png" alt="luggage delete" width="20">
                                 </button>
                             </div>`);
             } else {
@@ -478,7 +484,7 @@ function insertitem(text, val, type) {
                     <div id="id_${myid}" class="dataHoldableWrap" data-type="${val} ${type}">
                         <input class="form-control holddatainput" data-sendval="${val}@${text}" value="${newItem}" disabled data-type="${val} ${type}">
                         <button type="button" class=" del-btn_" onclick="removeitem(this)">
-                            <img class="form-icons" src="images/listICons/close.png" alt="luggage delete" width="20">
+                            <img class="form-icons" src="images/close.png" alt="luggage delete" width="20">
                         </button>
                     </div>
                 </div>`;
@@ -527,7 +533,6 @@ $(document).ready(function () {
         "TV(30to60inches)",
     ];
     $("#get-quotes").click(function (e) {
-      debugger
       e.preventDefault();
   
       // Pehle address fields ka validation check
@@ -539,6 +544,27 @@ $(document).ready(function () {
               allValid = false;
           }
       });
+
+      // ------------------- MIN WAIT TIME VALIDATION -------------------
+const $waitTime = $("#minwaittime");
+let waitTimeVal = $waitTime.val().trim();
+const $waitError = $("#waittimeError"); 
+
+if (waitTimeVal === "") {
+    $waitError.text("Please enter a wait time.").show();
+    $waitTime.focus();
+    return; 
+}
+
+waitTimeVal = parseInt(waitTimeVal, 10);
+if (isNaN(waitTimeVal) || waitTimeVal < 1 || waitTimeVal > 60) {
+    $waitError.text("Wait time must be between 1 and 60 minutes.").show();
+    $waitTime.focus();
+    return;
+}
+
+$waitError.hide();
+// ------------------- MIN WAIT TIME VALIDATION -------------------
   
       var date = $("#book_pick_date").val();
       var time = $("#book_pick_time").val();
@@ -815,12 +841,40 @@ const inputWrap = document.getElementById("toggleWaitingTime");
 //     e.target.blur();
 //   }
 // });
+const minwaittime = document.getElementById("minwaittime");
+const waittimeError = document.getElementById("waittimeError");
 
-document.getElementById("minwaittime").setAttribute("inputmode", "numeric");
+minwaittime.setAttribute("inputmode", "numeric");
 
-document.getElementById("minwaittime").addEventListener("keypress", function (e) {
+minwaittime.addEventListener("keypress", function (e) {
   if (!/[0-9]/.test(e.key)) {
-    e.preventDefault(); // block non-numeric
+    e.preventDefault();
+  }
+});
+minwaittime.addEventListener("input", function (e) {
+  let val = e.target.value;
+
+  // Leading zeros remove karna
+  val = val.replace(/^0+/, "");
+
+  if (val === "") {
+    e.target.value = "";
+    waittimeError.style.display = "none";
+    return;
+  }
+
+  let num = parseInt(val, 10);
+
+  // 60 se zyada na hone dena
+  if (num > 60) {
+    num = 60;
+  }
+
+  e.target.value = num;
+
+  // ✅ Live validation: agar 1-60 ke beech hai → error hide
+  if (num >= 1 && num <= 60) {
+    waittimeError.style.display = "none";
   }
 });
 document.querySelectorAll('input[type="date"], input[type="time"]').forEach(input => {
