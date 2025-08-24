@@ -859,7 +859,6 @@ dateInput.addEventListener("change", function () {
     }, 3000);
   }
 });
-document.addEventListener("DOMContentLoaded", function() {
   const sploader = document.getElementById("sploader");
   sploader.style.display = "block";
 
@@ -936,4 +935,3 @@ console.log(markup)
       console.error(error);
       sploader.style.display = "none";
     });
-});
