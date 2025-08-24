@@ -618,7 +618,19 @@ $(document).ready(function () {
       obj.push(hourstxt);
       obj.push(minutstxt);
   // ------------------- MIN WAIT TIME VALIDATION -------------------
-if(journeyType === "WR"){
+
+// ------------------- MIN WAIT TIME VALIDATION -------------------
+      
+      // IF-ELSE conditions
+      if (datetxt == "" || minutstxt == "" || hourstxt == "") {
+          alert("ERROR!\nPlease select all things correctly.");
+      }
+      else if (isNaN(passengers) || passengers <= 0) {
+        $("#passenger-error").text("Please select number of passengers").show();
+        $("#Passenger").addClass("field-error")
+      } 
+      else if (!allValid) {}
+      else if(journeyType === "WR"){
   const $waitTime = $("#minwaittime");
 let waitTimeVal = $waitTime.val().trim();
 const $waitError = $("#waittimeError"); 
@@ -638,17 +650,6 @@ if (isNaN(waitTimeVal) || waitTimeVal < 1 || waitTimeVal > 60) {
 $waitTime.removeClass(".field-error");
 $waitError.hide();
 }
-// ------------------- MIN WAIT TIME VALIDATION -------------------
-      
-      // IF-ELSE conditions
-      if (datetxt == "" || minutstxt == "" || hourstxt == "") {
-          alert("ERROR!\nPlease select all things correctly.");
-      }
-      else if (isNaN(passengers) || passengers <= 0) {
-        $("#passenger-error").text("Please select number of passengers").show();
-        $("#Passenger").addClass("field-error")
-      } 
-      else if (!allValid) {}
       else {
   
           const url =
