@@ -638,14 +638,14 @@ const $waitError = $("#waittimeError");
 if (waitTimeVal === "") {
     $waitError.text("Please enter a wait time.").show();
     $waitTime.addClass("field-error");
-    // return; 
+    return; 
 }
 
 waitTimeVal = parseInt(waitTimeVal, 10);
 if (isNaN(waitTimeVal) || waitTimeVal < 1 || waitTimeVal > 60) {
     $waitError.text("Wait time must be between 1 and 60 minutes.").show();
     $waitTime.addClass("field-error");
-    // return;
+    return;
 }
 $waitTime.removeClass("field-error");
 $waitError.hide();
