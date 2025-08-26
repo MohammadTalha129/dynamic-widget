@@ -6,9 +6,16 @@
     container.id = containerId;
     document.body.appendChild(container);
   }
-  Promise.all([
-    fetch("https://dynamic-widget.pages.dev/form.min.html").then(r => r.text()),
-    fetch("https://dynamic-widget.pages.dev/form-critical.min.css").then(r => r.text())
+  function loadForm(){
+    Promise.all([
+    fetch("https://dynamic-widget.pages.dev/form.min.html").then(r => {
+      if(!r.ok) throw new Error(`HTML load failed (${r.status} ${r.statusText})`);
+      return r.text();
+    }),
+    fetch("https://dynamic-widget.pages.dev/form-critical.min.css").then(r => {
+      if(!r.ok) throw new Error(`CSS load failed (${r.status} ${r.statusText})`);
+      return r.text();
+    })
   ]).then(([html, css]) => {
     let styleTag = document.querySelector("style");
     if(!styleTag){
@@ -25,5 +32,20 @@
     script.src = "https://dynamic-widget.pages.dev/form.min.js";
     script.defer = true;
     document.body.appendChild(script);
-  });
+  }).catch(err => {
+      console.error("Form load failed:", err);
+      let msg = err.message.split("(")[1].replace(")", "").trim();
+      container.innerHTML = `
+        <div class="formError">
+          <img src="images/caution.png" alt="Failed to Load Form">
+          <h2>Failed to Load Form ${msg}</h2>
+          <button id="retryForm">
+            Try Again
+          </button>
+        </div>
+      `;
+      document.getElementById("retryForm").onclick = loadForm;
+    });
+  }
+  loadForm();
 })();

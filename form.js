@@ -337,7 +337,7 @@ $("#add-via").on("click", function () {
       <div class="viaFieldBtnWrap fieldScaleable">
         <input type="text" class="fieldInput viadata" placeholder="Enter Via Location">
         <button type="button" class="removeField">
-          <img src="images/close.png" alt="Cut Via">
+          <img src="https://dynamic-widget.pages.dev/images/close.png" alt="Cut Via">
         </button>
       </div>
     </div>
@@ -461,7 +461,7 @@ function additem(e, val, type) {
                             <input class="form-control holddatainput" data-sendval="${newVal}@${text}" value="${newItem}" disabled data-type="${val} ${type}">
                             <div class="input-group-addon">
                                 <button type="button" class="" onclick="removeitem(this)">
-                                    <img class="form-icons" src="images/close.png" alt="luggage delete" width="20">
+                                    <img class="form-icons" src="https://dynamic-widget.pages.dev/images/close.png" alt="luggage delete" width="20">
                                 </button>
                             </div>`);
             } else {
@@ -484,7 +484,7 @@ function insertitem(text, val, type) {
                     <div id="id_${myid}" class="dataHoldableWrap" data-type="${val} ${type}">
                         <input class="form-control holddatainput" data-sendval="${val}@${text}" value="${newItem}" disabled data-type="${val} ${type}">
                         <button type="button" class=" del-btn_" onclick="removeitem(this)">
-                            <img class="form-icons" src="images/close.png" alt="luggage delete" width="20">
+                            <img class="form-icons" src="https://dynamic-widget.pages.dev/images/close.png" alt="luggage delete" width="20">
                         </button>
                     </div>
                 </div>`;
