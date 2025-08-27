@@ -64,7 +64,7 @@ body .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper.addrSearching{
     color: #000 !important;
     padding: 24px;
     cursor: pointer;
-    background-color: #fc983c !important
+    background-color: var(--webThemeColor) !important
 }
 
 .ui-autocomplete {
@@ -180,7 +180,7 @@ body .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper.addrSearching{
     border: none;
 }
 #moreModalitem .card-header button{
-    background-color: #fc983c;
+    background-color: var(--webThemeColor);
     margin-bottom: 10px;
     font-weight: 500;
     width: 100%;
@@ -198,7 +198,7 @@ body .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper.addrSearching{
     margin-bottom: 10px;
 }
 .modal-footer button{
-    background-color: #fc983c;
+    background-color: var(--webThemeColor);
     width: 200px;
     margin: 5px auto;
     font-weight: 500;
@@ -219,7 +219,7 @@ body .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper.addrSearching{
     left: 0;
     height: 3px;
     width: 0%;
-    background: #fc983c;
+    background: var(--webThemeColor);
     z-index: 9999;
     transition: width 0.4s ease;
 }
